@@ -1,29 +1,28 @@
 import React, { Component } from 'react';
 import YouTube from 'react-youtube';
 import { MdSearch } from 'react-icons/md';
-import 'typeface-roboto';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { theme } from './Theme.js'
 
-const theme = createMuiTheme({
-    typography: {
-        useNextVariants: true,
-    },
-    palette: {
-        primary: {
-            main: '#2196F2'
-        },
-        secondary: {
-            main: '#2196F2'
-        }
-    }
-});
+// const theme = createMuiTheme({
+//     typography: {
+//         useNextVariants: true,
+//     },
+//     palette: {
+//         primary: {
+//             main: '#2196F2'
+//         },
+//         secondary: {
+//             main: '#2196F2'
+//         }
+//     }
+// });
 
 function getYoutubeId(url) {
     var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -34,41 +33,18 @@ function getYoutubeId(url) {
         return "error";
     }
 }
-//TODO delete twitch stuff in this file
-function getTwitchLink(url) {
-    var user = url.substring(url.indexOf("twitch.tv/") + 10, url.length);
-    return "https://www.twitch.tv/embed/" + user + "/chat";
-}
-
-// function TwitchChatScreen(props) {
-//     return (
-//         <div className="TwitchChatScreen">
-//             <iframe title="Twitch Chat"
-//                     frameBorder="0"
-//                     scrolling="yes"
-//                     id="chat_embed"
-//                     src="https://www.twitch.tv/embed/hebo/chat"
-//                     // src="https://www.twitch.tv/embed/c9sneaky/chat"
-//                     height="100%"
-//                     width="100%">
-//             </iframe>
-//         </div>
-//     );
-// }
 
 class YouTubeScreen extends Component {
     constructor(props) {
         super(props);
-        //LinkValue os for the dialog value
+        //LinkValue is for the dialog value
         //Link is for the current link
         this.state = {
             showSearchIcon: false, 
             openDialog: false, 
             showSearchError: false,
             youtubeLinkValue: '', 
-            twitchLinkValue: '',
             youtubeLink: '',
-            twitchLink: 'https://www.twitch.tv/embed/hebo/chat',
             youtubeId: ''
         };
     }
@@ -93,11 +69,7 @@ class YouTubeScreen extends Component {
     handleYouTubeChange = (e) => {
         this.setState({youtubeLinkValue: e.target.value});
     };
-
-    handleTwitchChange = (e) => {
-        this.setState({twitchLinkValue: e.target.value});
-    };
-
+    
     searchLinks = () => {
         //TODO: Think about case where same link (maybe user wants to refresh)
         this.setState({youtubeLink: this.state.youtubeLinkValue});
@@ -110,9 +82,9 @@ class YouTubeScreen extends Component {
             this.setState({youtubeId: ytId});
         }
 
-        var twitchEmbedLink = getTwitchLink(this.state.twitchLinkValue);
+        // var twitchEmbedLink = getTwitchLink(this.state.twitchLinkValue);
 
-        this.setState({twitchLink: twitchEmbedLink});
+        // this.setState({twitchLink: twitchEmbedLink});
 
         this.setState({openDialog: false});
     }
@@ -122,7 +94,7 @@ class YouTubeScreen extends Component {
     }
 
     render() {
-        const searchShowState = this.state.showSearchIcon ? 'Search' : 'Search Hide';
+        const searchShowState = this.state.showSearchIcon ? 'YouTubeSearch' : 'Search Hide';
 
         const opts = {
             width: '100%',
@@ -144,7 +116,7 @@ class YouTubeScreen extends Component {
                             onClose={this.handleClose}
                             aria-labelledby="form-dialog-title"
                             >
-                                <DialogTitle id="form-dialog-title">Enter YouTube and Twitch Stream Links</DialogTitle>
+                                <DialogTitle id="form-dialog-title">Enter YouTube Link</DialogTitle>
                                 <DialogContent>
                                     {/* <DialogContentText>
                                     To subscribe to this website, please enter your email address here. We will send
@@ -160,7 +132,7 @@ class YouTubeScreen extends Component {
                                     value={this.state.youtubeLinkValue}
                                     />
                                 </DialogContent>
-                                <DialogContent>
+                                {/* <DialogContent>
                                     <TextField
                                     margin="dense"
                                     id="twitchLink"
@@ -169,7 +141,7 @@ class YouTubeScreen extends Component {
                                     onChange={this.handleTwitchChange}
                                     value={this.state.twitchLinkValue}
                                     />
-                                </DialogContent>
+                                </DialogContent> */}
                                 <DialogActions>
                                     <Button onClick={this.handleClose} color="primary">
                                     Cancel
