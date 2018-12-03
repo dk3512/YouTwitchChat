@@ -23,16 +23,8 @@ class TwitchChatScreen extends Component {
             openDialog: false,
             showSearchError: false,
             twitchLinkValue: '',
-            twitchLink: 'https://www.twitch.tv/embed/hebo/chat'
+            twitchLink: 'https://www.twitch.tv/embed/09873098475/chat'
         }
-    }
-
-    onHover = () => {
-        this.setState({showSearchIcon: true});
-    }
-
-    onHoverLeave = () => {
-        this.setState({showSearchIcon: false});
     }
 
     //when search icon is clicked
@@ -49,7 +41,6 @@ class TwitchChatScreen extends Component {
     };
 
     searchLinks = () => {
-        //TODO: Think about case where same link (maybe user wants to refresh)
         var twitchEmbedLink = getTwitchLink(this.state.twitchLinkValue);
 
         this.setState({twitchLink: twitchEmbedLink});
@@ -62,10 +53,9 @@ class TwitchChatScreen extends Component {
     }
 
     render() {
-        // const searchShowState = this.state.showSearchIcon ? 'TwitchSearch' : 'Search Hide';
 
         return (
-            <div className="TwitchChatScreen" >
+            <div className="TwitchChatScreen">
                 <div className="Options">
                     <MdSearch className="TwitchSearch" onClick={this.search} size={30} color="black"/>
                     <MuiThemeProvider theme={theme}>
@@ -115,11 +105,11 @@ class TwitchChatScreen extends Component {
                         src={this.state.twitchLink}
                         // src="https://www.twitch.tv/embed/c9sneaky/chat"
                         height="100%"
-                        width="100%">
+                        width="100%"
+                        >
                 </iframe>
             </div>
         );
     }
 }
-
 export default TwitchChatScreen;

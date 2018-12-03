@@ -17,10 +17,6 @@ html, body, #root {
   position: relative;
 }
 
-/* .Options {
-delete if only using search
-} */
-
 .YouTubeSearch {
   position: absolute;
   right: 0;

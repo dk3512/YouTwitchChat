@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import YouTube from 'react-youtube';
 import { MdSearch } from 'react-icons/md';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -9,20 +10,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { theme } from './Theme.js'
-
-// const theme = createMuiTheme({
-//     typography: {
-//         useNextVariants: true,
-//     },
-//     palette: {
-//         primary: {
-//             main: '#2196F2'
-//         },
-//         secondary: {
-//             main: '#2196F2'
-//         }
-//     }
-// });
 
 function getYoutubeId(url) {
     var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -40,21 +27,13 @@ class YouTubeScreen extends Component {
         //LinkValue is for the dialog value
         //Link is for the current link
         this.state = {
-            showSearchIcon: false, 
+            showSearchIcon: true, 
             openDialog: false, 
             showSearchError: false,
             youtubeLinkValue: '', 
             youtubeLink: '',
             youtubeId: ''
         };
-    }
-
-    onHover = () => {
-        this.setState({showSearchIcon: true});
-    }
-
-    onHoverLeave = () => {
-        this.setState({showSearchIcon: false});
     }
 
     //when search icon is clicked
@@ -71,7 +50,6 @@ class YouTubeScreen extends Component {
     };
     
     searchLinks = () => {
-        //TODO: Think about case where same link (maybe user wants to refresh)
         this.setState({youtubeLink: this.state.youtubeLinkValue});
 
         var ytId = getYoutubeId(this.state.youtubeLinkValue);
@@ -82,15 +60,19 @@ class YouTubeScreen extends Component {
             this.setState({youtubeId: ytId});
         }
 
-        // var twitchEmbedLink = getTwitchLink(this.state.twitchLinkValue);
-
-        // this.setState({twitchLink: twitchEmbedLink});
-
         this.setState({openDialog: false});
     }
 
     handleSearchErrorClose = () => {
         this.setState({showSearchError: false});
+    }
+
+    showSearchIcon = () => {
+        this.setState({showSearchIcon: true});
+    }
+
+    hideSearchIcon = () => {
+        this.setState({showSearchIcon: false});
     }
 
     render() {
@@ -103,10 +85,8 @@ class YouTubeScreen extends Component {
             }
         };
 
-        
-
         return (
-            <div className="YouTubeScreen" onMouseEnter={this.onHover} onMouseLeave={this.onHoverLeave}>
+            <div className="YouTubeScreen" ref="YouTubeScreen" onMouseMove={this.showSearchIcon} onMouseLeave={this.hideSearchIcon}>
                 <div className="Options">
                     { this.state.showSearchIcon ? <MdSearch className={searchShowState} onClick={this.search} size={30} color="white"/> : null }
                     
@@ -118,30 +98,15 @@ class YouTubeScreen extends Component {
                             >
                                 <DialogTitle id="form-dialog-title">Enter YouTube Link</DialogTitle>
                                 <DialogContent>
-                                    {/* <DialogContentText>
-                                    To subscribe to this website, please enter your email address here. We will send
-                                    updates occasionally.
-                                    </DialogContentText> */}
                                     <TextField
                                     autoFocus
                                     margin="dense"
                                     id="youtubeLink"
                                     label="YouTube Link"
-                                    fullWidth
                                     onChange={this.handleYouTubeChange}
                                     value={this.state.youtubeLinkValue}
                                     />
                                 </DialogContent>
-                                {/* <DialogContent>
-                                    <TextField
-                                    margin="dense"
-                                    id="twitchLink"
-                                    label="Twitch Link"
-                                    fullWidth
-                                    onChange={this.handleTwitchChange}
-                                    value={this.state.twitchLinkValue}
-                                    />
-                                </DialogContent> */}
                                 <DialogActions>
                                     <Button onClick={this.handleClose} color="primary">
                                     Cancel
@@ -168,7 +133,9 @@ class YouTubeScreen extends Component {
                 <YouTube
                     videoId={this.state.youtubeId}
                     opts={opts}
-                    // onReady={this._onReady}
+                    onPlay={this.hideSearchIcon}
+                    onPause={this.showSearchIcon}
+                    onEnd={this.showSearchIcon}
                 />
             </div>
         );
